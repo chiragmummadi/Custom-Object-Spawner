@@ -1,0 +1,10 @@
+{
+  "name": "com.gamebee.plugin.object_spawner",
+  "version": "4.5.0",
+  "displayName": "GBP Object Spawner",
+  "description": "GBP Object Spawner",
+  "unity": "2019.3",
+  "type": "library",
+  "hideInEditor": false,
+  "author": "Gamebee Studio"
+}
