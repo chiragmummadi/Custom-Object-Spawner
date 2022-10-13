@@ -6,6 +6,7 @@ public class ObjectSpawner : EditorWindow
     private string _objectName = "";
     private int _objectId = 1;
     private GameObject _object;
+    private GameObject _objectParent;
     private Vector3 _objectPosition;
     private Vector3 _objectRotation;
     private float _objectScale;
@@ -25,6 +26,7 @@ public class ObjectSpawner : EditorWindow
         _objectPosition = EditorGUILayout.Vector3Field("Object Position", _objectPosition);
         _objectRotation = EditorGUILayout.Vector3Field("Object Rotation", _objectRotation);
         _object = (GameObject)EditorGUILayout.ObjectField("GameObject", _object, typeof(GameObject), true);
+        _objectParent = (GameObject)EditorGUILayout.ObjectField("Parent GameObject", _objectParent, typeof(GameObject), true);
         if (GUILayout.Button("Spawn Object"))
         {
             SpawnObject();
@@ -48,5 +50,9 @@ public class ObjectSpawner : EditorWindow
         newObject.name = _objectName + _objectId;
         newObject.transform.localScale = Vector3.one * _objectScale;
         _objectId++;
+        if (_objectParent != null)
+        {
+            newObject.transform.SetParent(_objectParent.transform);
+        }
     }
 }
