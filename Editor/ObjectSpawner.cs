@@ -37,12 +37,12 @@ public class ObjectSpawner : EditorWindow
     {
         if (_object == null)
         {
-            Debug.LogError("No valid gameObject is assigned");
+            Debug.LogError("No valid GameObject is assigned");
             return;
         }
-        if (_objectName == null)
+        if (_objectName == "")
         {
-            Debug.LogError("Valid Name or Id of the gameObject is mandatory");
+            Debug.LogError("Valid name of the GameObject is required");
             return;
         }
 
