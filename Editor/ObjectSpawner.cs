@@ -16,7 +16,8 @@ public class ObjectSpawner : EditorWindow
     {
         "Normal", "UI", 
     };
-    
+    private Transform[] _transforms;
+    private string _parentName;
     
     [MenuItem("GBP/ObjectSpawner")]
     public static void ShowWindow()
@@ -34,7 +35,7 @@ public class ObjectSpawner : EditorWindow
         _objectParent = (GameObject)EditorGUILayout.ObjectField("Parent GameObject", _objectParent, typeof(GameObject), true);
         _selected = EditorGUILayout.Popup("Type of Object", _selected, _typeOfObject);
         EditorGUILayout.Space();
-        if (EditorGUILayout.BeginFadeGroup(_selected))
+        if (EditorGUILayout.BeginFadeGroup((float)_selected))
         {
             _objectPosition = EditorGUILayout.Vector3Field("Object Position", _objectPosition);
             _objectRotation = EditorGUILayout.Vector3Field("Object Rotation", _objectRotation); 
@@ -42,6 +43,7 @@ public class ObjectSpawner : EditorWindow
         }
         else
         {
+            EditorGUILayout.Space(20f);
             _objectPosition = EditorGUILayout.Vector3Field("Object Position", _objectPosition);
             _objectRotation = EditorGUILayout.Vector3Field("Object Rotation", _objectRotation);   
             _objectScale = EditorGUILayout.Slider("Object Scale", _objectScale, 0.5f, 10f);
@@ -52,6 +54,19 @@ public class ObjectSpawner : EditorWindow
         if (GUILayout.Button("Spawn Object"))
         {
             SpawnObject();
+        }
+       
+        EditorGUILayout.Space(100f);
+        GUILayout.Label("GBP Parent Tool", EditorStyles.boldLabel);
+        _parentName = EditorGUILayout.TextField("Parent Name", _parentName);
+        if (GUILayout.Button("Parent Tool"))
+        {
+            _transforms = Selection.transforms;
+            var parentObject = new GameObject(_parentName);
+            foreach (var t in _transforms)
+            {
+                t.SetParent(parentObject.transform);
+            }
         }
 
     }
