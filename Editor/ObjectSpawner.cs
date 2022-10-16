@@ -1,8 +1,10 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEditor.AnimatedValues;
 
 public class ObjectSpawner : EditorWindow
 {
+    private AnimBool _animBool;
     private string _objectName = "";
     private int _objectId = 1;
     private GameObject _object;
@@ -25,6 +27,12 @@ public class ObjectSpawner : EditorWindow
         GetWindow(typeof(ObjectSpawner));
     }
 
+    private void OnEnable()
+    {
+        _animBool = new AnimBool(false);
+        _animBool.valueChanged.AddListener(Repaint);
+    }
+    
     private void OnGUI()
     {
         GUILayout.Label("GBP Object Spawner", EditorStyles.boldLabel);
@@ -35,9 +43,15 @@ public class ObjectSpawner : EditorWindow
         _objectParent = (GameObject)EditorGUILayout.ObjectField("Parent GameObject", _objectParent, typeof(GameObject), true);
         _selected = EditorGUILayout.Popup("Type of Object", _selected, _typeOfObject);
         EditorGUILayout.Space();
-        if (EditorGUILayout.BeginFadeGroup((float)_selected))
+        _animBool.target = _selected switch
         {
-            _objectPosition = EditorGUILayout.Vector3Field("Object Position", _objectPosition);
+            0 => false,
+            1 => true,
+            _ => _animBool.target
+        };
+        if (EditorGUILayout.BeginFadeGroup(_animBool.faded))
+        {
+            _objectPosition = EditorGUILayout.Vector3Field("Anchored Position", _objectPosition);
             _objectRotation = EditorGUILayout.Vector3Field("Object Rotation", _objectRotation); 
             _objectUISize = EditorGUILayout.Vector2Field("Object Size", _objectUISize);
         }
